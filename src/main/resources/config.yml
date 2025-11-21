@@ -1,0 +1,47 @@
+placeholders:
+  top: "<#FFD20A><rank>. <#DCFC7E><player></#DCFC7E> - <#B5F200>$<balance>"
+  player: "<#DCFC7E><player></#DCFC7E> is <#FFD20A>#<rank></#FFD20A> with <#B5F200>$<balance>"
+  server-average: "<#FFD20A>Server Average<white>: <#3B5F200>$<balance>"
+  not-available: "<red>N/A</red>"
+
+
+settings:
+  debug: false
+  top-limit: 10
+  refresh-interval: 60
+  check-updates: true
+  notify-op-updates: true
+
+
+messages:
+  prefix: "<gray>[<#50F527>VL</#50F527>]</gray>"
+  help:
+    - "<#CAF549><u><bold>VaultLeaderboards Help</bold><white>:"
+    - "<#A7E600>/vaultleaderboards help</#A7E600> <white>- <#A7E600>Show this help"
+    - "<#A7E600>/vaultleaderboards reload</#A7E600> <white>- <#A7E600>Reload configuration"
+    - "<#A7E600>/vaultleaderboards version</#A7E600> <white>- <#A7E600>Check version and updates"
+  version:
+    checking: "<gray>Checking for updates...</gray>"
+    up-to-date: "<#A7E600>You are running the <white>latest <#A7E600>version!</#A7E600>"
+    available: "<#CC505B>New version available: <white><new-version></white>"
+    download: "<#F549DB>Download<white>: <#F595E8><url>"
+    error: "<#CC505B>Failed to check for updates.</#CC505B>"
+  reload: "<#A7E600>Configuration reloaded!</#A7E600>"
+  no-permission: "<#CC505B>You lack permission for this command.</#CC505B>"
+
+  # PREFIX LOGIC NOT YET IMPLEMENTED
+  op-notify-update:
+    up-to-date: "<gray>[<#50F527>VL</#50F527>]</gray> <#A7E600>You are running the <white>latest <#A7E600>version of VaultLeaderboards!"
+    available: "<gray>[<#50F527>VL</#50F527>]</gray> <#CC505B>New version available: <white><new-version></white>"
+    download: "<gray>[<#50F527>VL</#50F527>]</gray> <#F549DB>Download<white>: <#F595E8><url>"
+
+permissions:
+  vaultleaderboards.help:
+    description: "Access help command"
+    default: true
+  vaultleaderboards.reload:
+    description: "Reload configuration"
+    default: op
+  vaultleaderboards.version:
+    description: "Check version and updates"
+    default: true

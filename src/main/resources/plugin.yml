@@ -1,0 +1,36 @@
+name: VaultLeaderboards
+version: 1.3
+main: net.godlycow.org.vaultleaderboards.VaultLeaderboards
+api-version: 1.20
+author: _GodlyCow
+description: Vault economy leaderboards with PlaceholderAPI support, server average, update checker, and more.
+website: https://github.com/GodlyCow203/VaultLeaderboards
+depend: [Vault]
+softdepend: [PlaceholderAPI]
+
+commands:
+  vaultleaderboards:
+    description: Main command for VaultLeaderboards
+    usage: |
+      /vaultleaderboards help - Show help
+      /vaultleaderboards reload - Reload configuration
+      /vaultleaderboards version - Check version and updates
+    aliases: [vl, vleaderboards]
+
+permissions:
+  vaultleaderboards.help:
+    description: Access the help command
+    default: true
+  vaultleaderboards.reload:
+    description: Reload the plugin configuration
+    default: op
+  vaultleaderboards.version:
+    description: Check plugin version and updates
+    default: true
+  vaultleaderboards.*:
+    description: Access to all VaultLeaderboards commands
+    default: op
+    children:
+      vaultleaderboards.help: true
+      vaultleaderboards.reload: true
+      vaultleaderboards.version: true
