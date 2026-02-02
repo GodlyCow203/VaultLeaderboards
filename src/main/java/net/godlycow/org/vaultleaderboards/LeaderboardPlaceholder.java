@@ -43,8 +43,18 @@ public class LeaderboardPlaceholder extends PlaceholderExpansion {
          }
       } else if (identifier.equalsIgnoreCase("server_average")) {
          return LegacyComponentSerializer.legacySection().serialize(this.manager.getServerAverageComponent());
+      } else if (identifier.startsWith("topearner_")) {
+         try {
+            String[] parts = identifier.split("_");
+            int rank = Integer.parseInt(parts[1]);
+            int days = parts.length > 2 ? Integer.parseInt(parts[2].replace("d", "")) : 7;
+            return LegacyComponentSerializer.legacySection().serialize(this.manager.getTopEarnerComponent(rank, days));
+         } catch (Exception e) {
+            return "§cInvalid format (use topearner_1_7d)";
+         }
       } else {
-         return identifier.matches("^[A-Za-z0-9_]{3,16}$") ? LegacyComponentSerializer.legacySection().serialize(this.manager.getPlayerRankComponent(identifier)) : null;
+         return identifier.matches("^[A-Za-z0-9_]{3,16}$") ?
+                 LegacyComponentSerializer.legacySection().serialize(this.manager.getPlayerRankComponent(identifier)) : null;
       }
    }
 }

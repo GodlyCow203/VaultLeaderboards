@@ -6,7 +6,7 @@
 
     <groupId>net.godlycow.org.vaultleaderboards</groupId>
     <artifactId>VaultLeaderboards</artifactId>
-    <version>1.2</version>
+    <version>1.4</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -43,6 +43,13 @@
             <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>me.clip</groupId>
