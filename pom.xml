@@ -6,7 +6,7 @@
 
     <groupId>net.godlycow.org.vaultleaderboards</groupId>
     <artifactId>VaultLeaderboards</artifactId>
-    <version>1.4</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <properties>

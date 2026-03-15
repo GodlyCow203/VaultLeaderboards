@@ -92,8 +92,14 @@ public final class VaultLeaderboards extends JavaPlugin implements Listener {
 
       if (leaderboardManager.isDatabaseEnabled()) {
          Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
-            double balance = economy.getBalance(player);
-            leaderboardManager.notifyBalanceChange(player.getUniqueId(), player.getName(), balance);
+            try {
+               double balance = economy.getBalance(player);
+               Bukkit.getScheduler().runTask(this, () -> {
+                  leaderboardManager.notifyBalanceChange(player.getUniqueId(), player.getName(), balance);
+               });
+            } catch (Exception e) {
+               getLogger().warning("Failed to get balance for " + player.getName() + ": " + e.getMessage());
+            }
          }, 20L);
       }
 

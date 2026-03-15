@@ -78,21 +78,39 @@ public class LeaderboardManager {
       }
 
       this.balances.clear();
-      Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-         OfflinePlayer[] offlinePlayerArray = Bukkit.getOfflinePlayers();
+      this.playerNames.clear();
 
+      OfflinePlayer[] offlinePlayerArray = Bukkit.getOfflinePlayers();
+
+      Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
          for (OfflinePlayer player : offlinePlayerArray) {
-            double balance = this.economy.getBalance(player);
-            this.balances.put(player.getUniqueId(), balance);
-            this.playerNames.put(player.getUniqueId(), player.getName());
+            // if the player name is null it gets skipped
+            String playerName = player.getName();
+            if (playerName == null) continue;
+
+            double balance = sGetBalance(player);
+
+            Bukkit.getScheduler().runTask(this.plugin, () -> {
+               this.balances.put(player.getUniqueId(), balance);
+               this.playerNames.put(player.getUniqueId(), playerName);
+            });
 
             if (this.plugin.getConfig().getBoolean("settings.debug", false)) {
-               Logger var10000 = this.plugin.getLogger();
-               String var10001 = player.getName();
-               var10000.info("Loaded " + var10001 + " → " + balance);
+               this.plugin.getLogger().info("Loaded " + playerName + " → " + balance);
             }
          }
       });
+   }
+
+
+   private double sGetBalance(OfflinePlayer player) {
+      try {
+         return this.economy.getBalance(player);
+      } catch (NullPointerException e) {
+         return 0.0;
+      } catch (Exception e) {
+         return 0.0;
+      }
    }
 
    public Component getTopPlayerComponent(int rank) {
