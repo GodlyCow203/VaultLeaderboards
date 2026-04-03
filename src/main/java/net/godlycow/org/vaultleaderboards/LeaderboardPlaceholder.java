@@ -52,6 +52,27 @@ public class LeaderboardPlaceholder extends PlaceholderExpansion {
          } catch (Exception e) {
             return "§cInvalid format (use topearner_1_7d)";
          }
+      } else if (identifier.startsWith("daily_")) {
+         try {
+            int rank = Integer.parseInt(identifier.split("_")[1]);
+            return LegacyComponentSerializer.legacySection().serialize(this.manager.getDailyTopEarnerComponent(rank));
+         } catch (Exception e) {
+            return "§cInvalid format (use daily_1)";
+         }
+      } else if (identifier.startsWith("weekly_")) {
+         try {
+            int rank = Integer.parseInt(identifier.split("_")[1]);
+            return LegacyComponentSerializer.legacySection().serialize(this.manager.getWeeklyTopEarnerComponent(rank));
+         } catch (Exception e) {
+            return "§cInvalid format (use weekly_1)";
+         }
+      } else if (identifier.startsWith("monthly_")) {
+         try {
+            int rank = Integer.parseInt(identifier.split("_")[1]);
+            return LegacyComponentSerializer.legacySection().serialize(this.manager.getMonthlyTopEarnerComponent(rank));
+         } catch (Exception e) {
+            return "§cInvalid format (use monthly_1)";
+         }
       } else {
          return identifier.matches("^[A-Za-z0-9_]{3,16}$") ?
                  LegacyComponentSerializer.legacySection().serialize(this.manager.getPlayerRankComponent(identifier)) : null;

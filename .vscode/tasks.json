@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Maven: build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"$env:PATH; if (-not (Get-Command mvn -ErrorAction SilentlyContinue)) { Write-Host 'Maven not found. Please install Maven'; exit 1 } else { mvn clean package }"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$java"
+			],
+			"group": "build"
+		}
+	]
+}

@@ -3,6 +3,7 @@ package net.godlycow.org.vaultleaderboards;
 import net.godlycow.org.vaultleaderboards.database.DatabaseConfig;
 import net.godlycow.org.vaultleaderboards.database.DatabaseManager;
 import net.godlycow.org.vaultleaderboards.database.SyncManager;
+import net.godlycow.org.vaultleaderboards.faststats.FastStatsManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.milkbowl.vault.economy.Economy;
@@ -22,6 +23,7 @@ public class LeaderboardManager {
    private DatabaseConfig dbConfig;
    private DatabaseManager dbManager;
    private SyncManager syncManager;
+   private FastStatsManager fastStatsManager;
    private boolean useDatabase;
 
    private final Map<UUID, Double> balances = new ConcurrentHashMap<>();
@@ -31,6 +33,7 @@ public class LeaderboardManager {
       this.plugin = plugin;
       this.economy = economy;
       setupDatabase();
+      setupFastStats();
    }
 
    private void setupDatabase() {
@@ -53,6 +56,12 @@ public class LeaderboardManager {
       }
    }
 
+   private void setupFastStats() {
+      String projectId = "021e3106-76fb-4189-9263-bd8760c85c5a";
+      this.fastStatsManager = new FastStatsManager(plugin, projectId);
+      plugin.getLogger().info("FastStats integration enabled!");
+   }
+
    private void loadFromDatabase() {
       Map<UUID, DatabaseManager.PlayerBalance> top = dbManager.getTopBalancesSync(1000, 0);
       top.forEach((uuid, pb) -> {
@@ -68,6 +77,9 @@ public class LeaderboardManager {
       }
       if (dbManager != null) {
          dbManager.disconnect();
+      }
+      if (fastStatsManager != null) {
+         fastStatsManager.shutdown();
       }
    }
 
@@ -273,5 +285,93 @@ public class LeaderboardManager {
 
    public DatabaseManager getDatabaseManager() {
       return dbManager;
+   }
+
+   public Component getDailyTopEarnerComponent(int rank) {
+      if (fastStatsManager == null || !fastStatsManager.isEnabled()) {
+         String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+         return this.mini.deserialize(naTemplate);
+      }
+
+      try {
+         int limit = plugin.getConfig().getInt("settings.top-limit", 10);
+         List<FastStatsManager.FastStatsEarner> earners = fastStatsManager.getTopEarners("daily", limit).get();
+
+         if (rank > 0 && rank <= earners.size()) {
+            FastStatsManager.FastStatsEarner earner = earners.get(rank - 1);
+            String template = this.plugin.getConfig().getString("placeholders.daily-top",
+                    "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (today)");
+            String result = template
+                    .replace("<rank>", String.valueOf(rank))
+                    .replace("<player>", earner.getPlayerName())
+                    .replace("<amount>", this.formatBalance(earner.getAmount()));
+            return this.mini.deserialize(result);
+         }
+      } catch (Exception e) {
+         plugin.getLogger().warning("Failed to get daily top earners: " + e.getMessage());
+      }
+
+      String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+      return this.mini.deserialize(naTemplate);
+   }
+
+   public Component getWeeklyTopEarnerComponent(int rank) {
+      if (fastStatsManager == null || !fastStatsManager.isEnabled()) {
+         String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+         return this.mini.deserialize(naTemplate);
+      }
+
+      try {
+         int limit = plugin.getConfig().getInt("settings.top-limit", 10);
+         List<FastStatsManager.FastStatsEarner> earners = fastStatsManager.getTopEarners("weekly", limit).get();
+
+         if (rank > 0 && rank <= earners.size()) {
+            FastStatsManager.FastStatsEarner earner = earners.get(rank - 1);
+            String template = this.plugin.getConfig().getString("placeholders.weekly-top",
+                    "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (week)");
+            String result = template
+                    .replace("<rank>", String.valueOf(rank))
+                    .replace("<player>", earner.getPlayerName())
+                    .replace("<amount>", this.formatBalance(earner.getAmount()));
+            return this.mini.deserialize(result);
+         }
+      } catch (Exception e) {
+         plugin.getLogger().warning("Failed to get weekly top earners: " + e.getMessage());
+      }
+
+      String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+      return this.mini.deserialize(naTemplate);
+   }
+
+   public Component getMonthlyTopEarnerComponent(int rank) {
+      if (fastStatsManager == null || !fastStatsManager.isEnabled()) {
+         String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+         return this.mini.deserialize(naTemplate);
+      }
+
+      try {
+         int limit = plugin.getConfig().getInt("settings.top-limit", 10);
+         List<FastStatsManager.FastStatsEarner> earners = fastStatsManager.getTopEarners("monthly", limit).get();
+
+         if (rank > 0 && rank <= earners.size()) {
+            FastStatsManager.FastStatsEarner earner = earners.get(rank - 1);
+            String template = this.plugin.getConfig().getString("placeholders.monthly-top",
+                    "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (month)");
+            String result = template
+                    .replace("<rank>", String.valueOf(rank))
+                    .replace("<player>", earner.getPlayerName())
+                    .replace("<amount>", this.formatBalance(earner.getAmount()));
+            return this.mini.deserialize(result);
+         }
+      } catch (Exception e) {
+         plugin.getLogger().warning("Failed to get monthly top earners: " + e.getMessage());
+      }
+
+      String naTemplate = this.plugin.getConfig().getString("placeholders.not-available", "<red>N/A</red>");
+      return this.mini.deserialize(naTemplate);
+   }
+
+   public FastStatsManager getFastStatsManager() {
+      return fastStatsManager;
    }
 }

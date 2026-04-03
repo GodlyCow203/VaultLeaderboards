@@ -17,6 +17,28 @@ database:
     enabled: true
     interval-seconds: 30  # How often to sync with database
 
+# Time Period Settings
+time-periods:
+  daily:
+    # Time of day when daily leaderboard resets (24-hour format)
+    # Example: "00:00" for midnight, "06:00" for 6 AM
+    reset-time: "00:00"
+    timezone: "UTC"
+  
+  weekly:
+    # Day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+    # Time when weekly leaderboard resets
+    reset-day: "MONDAY"
+    reset-time: "00:00"
+    timezone: "UTC"
+  
+  monthly:
+    # Day of month (1-31) when monthly leaderboard resets
+    # If day doesn't exist (e.g., 31st from Feb), it resets on last day of month
+    reset-day: 1
+    reset-time: "00:00"
+    timezone: "UTC"
+
 # New placeholder configurations
 placeholders:
   top: "<yellow><rank>. <green><player></green> - <aqua>$<balance>"
@@ -24,6 +46,11 @@ placeholders:
   server-average: "<yellow>Server Average: <aqua>$<balance>"
   not-available: "<red>N/A</red>"
   top-earner: "<yellow><rank>. <green><player></green> +<aqua>$<amount></aqua> (<days>d)"
+  
+  # Daily/Weekly/Monthly top earner placeholders
+  daily-top: "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (today)"
+  weekly-top: "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (week)"
+  monthly-top: "<yellow><rank>. <green><player></green> <aqua>+$<amount></aqua> (month)"
 
 # Updated messages
 messages:
